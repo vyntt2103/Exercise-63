@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Registration</title>
+    <style>
+        body {
+            font-family: Times New Roman;
+        }
+        .highlight-blue {
+            background-color: blue;
+        }
+        .highlight-red {
+            background-color: red;
+        }
+        .highlight-green {
+            background-color: green;
+        }
+        .highlight-yellow {
+            background-color: yellow;
+        }
+        .highlight-violet {
+            background-color: violet ;
+        }
+        table {
+            border-collapse: collapse;
+            width: 10%;   
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th {
+            padding: 5px;
+            text-align: left;
+            background-color: blue;
+            color: white;
+            font-weight: lighter;
+        }
+        .highlight-row {
+            background-color: yellow;
+        }
+    </style>
+    <script>
+        function loadDropdowns() {
+            const dayDropdown = document.getElementById('day');
+            const monthDropdown = document.getElementById('month');
+            const yearDropdown = document.getElementById('year');
+
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                dayDropdown.appendChild(option);
+            }
+
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                monthDropdown.appendChild(option);
+            }
+
+            for (let i = 1970; i <= 2023; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearDropdown.appendChild(option);
+            }
+        }
+
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!name) {
+                alert("Name cannot be left blank.");
+                return false;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Email must be valid.");
+                return false;
+            }
+
+            return true;
+        }
+
+        function register() {
+            if (!validateForm()) return;
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const day = document.getElementById('day').value;
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+           
+            const hobbies = [];
+            document.querySelectorAll('input[name="hobbies"]:checked').forEach(hobby => {
+                hobbies.push(hobby.value);
+            });
+
+            const color = document.querySelector('input[name="color"]:checked').value;
+
+            const table = document.getElementById('membersTable');
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>${email}</td>
+                <td>${gender}</td>
+                <td>${day}/${month}/${year}</td>
+                <td>${hobbies.join(', ')}</td>
+                <td>${color}</td>
+                `;
+
+            row.addEventListener('mouseover', () => row.classList.add('highlight-row'));
+            row.addEventListener('mouseout', () => row.classList.remove('highlight-row'));
+        }
+
+        function resetForm() {
+            document.getElementById('registrationForm').reset();
+        }
+
+        function next() {
+            const table = document.getElementById('membersTable');
+            if (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+        }
+
+        window.onload = loadDropdowns;
+    </script>
+</head>
+<body>
+    <h1>Member Registration</h1>
+    <hr/><br>
+    <form id="registrationForm">
+        <div>
+            <label>Name(*)</label>
+            <input type="text" id="name">
+        </div>
+        <div>
+            <label>Birthday(*)</label>
+            Day: <select id="day"></select>
+            Month: <select id="month"></select>
+            Year: <select id="year"></select>
+        </div>
+        <div>
+            <label>Gender(*)</label>
+            <input type="radio" name="gender" value="Man" checked> Man
+            <input type="radio" name="gender" value="Woman"> Woman
+        </div>
+        <div>
+            <label>Email(*)</label>
+            <input type="text" id="email">
+        </div>
+        <br>
+        <div>
+            <label>Your favorite:</label><br>
+            <input type="checkbox" name="hobbies" value="Shopping"> Shopping<br>
+            <input type="checkbox" name="hobbies" value="Tourism"> Tourism<br>
+            <input type="checkbox" name="hobbies" value="Chat"> Chat<br>
+            <input type="checkbox" name="hobbies" value="Reading"> Read a book<br>
+            <input type="checkbox" name="hobbies" value="Listening to music"> Listening to music<br>
+        </div>
+        <div>
+            <label>Your favorite color:</label><br>
+            <input type="radio" name="color" value="Blue" class="highlight-blue" checked> <span class="highlight-blue">Blue</span><br>
+            <input type="radio" name="color" value="Red" class="highlight-red"> <span class="highlight-red">Red</span><br>
+            <input type="radio" name="color" value="Green" class="highlight-green"> <span class="highlight-green">Green</span><br>
+            <input type="radio" name="color" value="Yellow" class="highlight-yellow"> <span class="highlight-yellow">Yellow</span><br>
+            <input type="radio" name="color" value="Violet" class="highlight-violet"> <span class="highlight-violet">Violet</span><br>
+        </div><br>
+        <div>
+            <button type="button" onclick="register()">Sign up</button>
+            <button type="button" onclick="resetForm()">Reset</button>
+            <button type="button" onclick="next()">Next</button>
+        </div>
+    </form>
+    <br>
+    <table id="membersTable">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Birthday</th>
+            <th>Hobbies</th>
+            <th>Colors</th>
+        </tr>
+    </table>
+</body>
+</html>
